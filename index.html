@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jonghoon Kim — Documentary Photography</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <button class="menu-toggle" id="menuToggle">&#9776;</button>
+
+    <nav id="sidebar">
+        <div class="nav-header">
+            <a class="site-title nav-link" data-section="home">JONGHOON KIM</a>
+        </div>
+        <ul class="nav-list">
+            <li><a class="nav-link" data-section="home">Home</a></li>
+            <li class="nav-group">
+                <span class="nav-category">Projects</span>
+                <ul>
+                    <li><a class="nav-link" data-section="bohemian-ways">Bohemian ways</a></li>
+                    <li><a class="nav-link" data-section="midnight-journey">Midnight journey</a></li>
+                    <li><a class="nav-link" data-section="thailand">Thailand</a></li>
+                    <li><a class="nav-link" data-section="china">China</a></li>
+                    <li><a class="nav-link" data-section="12032011">12.03.2011</a></li>
+                </ul>
+            </li>
+            <li class="nav-group">
+                <span class="nav-category">Ongoing Projects</span>
+                <ul>
+                    <li><a class="nav-link" data-section="archipelago">Archipelago</a></li>
+                    <li><a class="nav-link" data-section="movin-scape">Movin' scape</a></li>
+                    <li><a class="nav-link" data-section="portrait">Portrait</a></li>
+                </ul>
+            </li>
+            <li class="nav-bio"><a class="nav-link" data-section="biography">Biography &amp; Contact</a></li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+
+        <div id="home" class="section active">
+            <div class="home-grid" id="homeGrid"></div>
+        </div>
+
+        <div id="gallery" class="section">
+            <h1 class="gallery-title" id="galleryTitle"></h1>
+            <div class="gallery-grid" id="galleryGrid"></div>
+        </div>
+
+        <div id="biography" class="section">
+            <div class="bio-content">
+                <div class="bio-layout">
+                    <div class="bio-photo">
+                        <img src="gimgs/dsc58862b.jpg" alt="Jonghoon Kim">
+                    </div>
+                    <div class="bio-text">
+                        <h1>Biography</h1>
+                        <p>Jonghoon Kim is a documentary photographer based in South Korea. Working across Asia, he spends extended time within the communities he photographs — following people whose lives unfold at the edges of place and belonging: migrants, wanderers, those in transit.</p>
+                        <p>His work is unhurried and close. Rather than pursuing the dramatic or the decisive, Kim looks for what accumulates quietly — gestures, light, the texture of an ordinary moment that holds more than it first appears.</p>
+                        <h2>Contact</h2>
+                        <p><a href="mailto:kjhfoto@gmail.com">kjhfoto@gmail.com</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="lightbox" class="lightbox hidden">
+        <div class="lb-img-wrap">
+            <button class="lb-prev" id="lbPrev">&#8249;</button>
+            <div class="lb-img-frame">
+                <button class="lb-close" id="lbClose">&#10005;</button>
+                <img id="lbImg" src="" alt="">
+            </div>
+            <button class="lb-next" id="lbNext">&#8250;</button>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
