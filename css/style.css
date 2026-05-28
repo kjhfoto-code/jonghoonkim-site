@@ -313,7 +313,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 80px;
+    gap: clamp(8px, 4vw, 80px);
     margin: auto;
 }
 
@@ -344,13 +344,13 @@ body {
 
 .lb-close {
     position: absolute;
-    bottom: calc(100% + 80px);
+    bottom: calc(100% + clamp(8px, 4vw, 80px));
     left: 50%;
     transform: translateX(-50%);
     background: none;
     border: none;
     color: #2e2e2e;
-    font-size: 48px;
+    font-size: clamp(24px, 5vw, 48px);
     cursor: pointer;
     padding: 0;
     line-height: 1;
@@ -365,7 +365,7 @@ body {
     background: none;
     border: none;
     color: #2e2e2e;
-    font-size: 112px;
+    font-size: clamp(32px, 8vw, 112px);
     cursor: pointer;
     padding: 10px 0;
     line-height: 1;
@@ -434,7 +434,5 @@ body {
 @media (max-width: 500px) {
     .home-grid    { grid-template-columns: repeat(2, 1fr); }
     .gallery-grid { grid-template-columns: repeat(2, 1fr); }
-    .lb-main-row  { gap: 20px; }
-    .lb-prev, .lb-next { font-size: 56px; }
     #lbImg { max-width: 80vw; }
 }
