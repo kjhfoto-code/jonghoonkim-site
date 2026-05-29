@@ -12,6 +12,7 @@
     --nav-width: 260px;
     --gap: 20px;
     --radius: 14px;
+    --lb-btn-size: clamp(24px, 3vw, 48px);
 }
 
 html {
@@ -339,7 +340,7 @@ body {
     background: none;
     border: none;
     color: #2e2e2e;
-    font-size: clamp(14px, 2vw, 28px);
+    font-size: var(--lb-btn-size);
     cursor: pointer;
     padding: 4px 10px;
     line-height: 1;
@@ -358,7 +359,7 @@ body {
     background: none;
     border: none;
     color: #2e2e2e;
-    font-size: clamp(14px, 2vw, 28px);
+    font-size: var(--lb-btn-size);
     cursor: pointer;
     padding: 4px 10px;
     line-height: 1;
