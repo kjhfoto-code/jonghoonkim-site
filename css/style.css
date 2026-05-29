@@ -340,10 +340,10 @@ body {
     background: none;
     border: none;
     color: #2e2e2e;
-    font-size: clamp(16.8px, 2.1vw, 33.6px) !important;
+    font-size: clamp(20px, 2.5vw, 40px) !important;
     cursor: pointer;
-    padding: 4px 10px;
-    line-height: 1;
+    padding: 0 !important;
+    line-height: 1 !important;
     transition: color 0.2s;
     white-space: nowrap;
 }
