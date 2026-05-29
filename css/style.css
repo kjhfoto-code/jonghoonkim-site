@@ -340,7 +340,7 @@ body {
     background: none;
     border: none;
     color: #2e2e2e;
-    font-size: var(--lb-btn-size);
+    font-size: clamp(16.8px, 2.1vw, 33.6px) !important;
     cursor: pointer;
     padding: 4px 10px;
     line-height: 1;
