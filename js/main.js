@@ -215,6 +215,23 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') lbNext();
 });
 
+(function () {
+  let touchStartX = 0;
+  const SWIPE_THRESHOLD = 50;
+  const lb = document.getElementById('lightbox');
+
+  lb.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].clientX;
+  }, { passive: true });
+
+  lb.addEventListener('touchend', e => {
+    if (document.getElementById('lightbox').classList.contains('hidden')) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) < SWIPE_THRESHOLD) return;
+    dx < 0 ? lbNext() : lbPrev();
+  }, { passive: true });
+}());
+
 document.querySelectorAll('.nav-link').forEach(a => {
   a.addEventListener('click', e => {
     e.preventDefault();
