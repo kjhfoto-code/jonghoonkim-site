@@ -436,10 +436,19 @@ body {
         margin-left: 0;
         padding: 64px 18px 60px;
     }
+
+    .lb-close { top: 12px; }
 }
 
 @media (max-width: 500px) {
     .home-grid    { grid-template-columns: repeat(2, 1fr); }
     .gallery-grid { grid-template-columns: repeat(2, 1fr); }
     #lbImg { max-width: 75vw; max-height: 75vh; }
+}
+
+@media (orientation: landscape) {
+    .lb-close {
+        top: 8px;
+        font-size: clamp(10px, 1.2vw, 20px) !important;
+    }
 }
