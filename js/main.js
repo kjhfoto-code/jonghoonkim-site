@@ -186,11 +186,17 @@ function applyLightboxSize(img) {
   const prev  = document.getElementById('lbPrev');
   const next  = document.getElementById('lbNext');
   const close = document.getElementById('lbClose');
-  prev.style.left  = Math.max(0, imgLeft - 80) + 'px';
+
+  const prevW  = prev.offsetWidth  || 40;
+  const nextW  = next.offsetWidth  || 40;
+  const closeH = close.offsetHeight || 30;
+
+  // Place 80px outside image edge; clamp so button never overlaps image
+  prev.style.left  = Math.min(imgLeft - prevW,  Math.max(0, imgLeft - 80)) + 'px';
   prev.style.right = 'auto';
-  next.style.right = Math.max(0, imgLeft - 80) + 'px';
+  next.style.right = Math.min(imgLeft - nextW,  Math.max(0, imgLeft - 80)) + 'px';
   next.style.left  = 'auto';
-  close.style.top  = Math.max(0, imgTop - 80) + 'px';
+  close.style.top  = Math.min(imgTop  - closeH, Math.max(0, imgTop  - 80)) + 'px';
 }
 
 function openLightbox(index) {
