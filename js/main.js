@@ -181,13 +181,16 @@ function applyLightboxSize(img) {
   img.style.width  = w + 'px';
   img.style.height = h + 'px';
 
-  const imgLeft  = (window.innerWidth - w) / 2;
-  const prev = document.getElementById('lbPrev');
-  const next = document.getElementById('lbNext');
+  const imgLeft = (window.innerWidth - w) / 2;
+  const imgTop  = (window.innerHeight - h) / 2;
+  const prev  = document.getElementById('lbPrev');
+  const next  = document.getElementById('lbNext');
+  const close = document.getElementById('lbClose');
   prev.style.left  = Math.max(0, imgLeft - 80) + 'px';
   prev.style.right = 'auto';
   next.style.right = Math.max(0, imgLeft - 80) + 'px';
   next.style.left  = 'auto';
+  close.style.top  = Math.max(0, imgTop - 80) + 'px';
 }
 
 function openLightbox(index) {
