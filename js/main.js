@@ -119,7 +119,7 @@ function showSection(id) {
   window.scrollTo(0, 0);
 
   if (window.innerWidth <= 768) {
-    document.getElementById('sidebar').classList.remove('open');
+    closeSidebar();
   }
 }
 
@@ -258,9 +258,41 @@ document.querySelectorAll('.nav-link').forEach(a => {
   });
 });
 
+const sidebar = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+function openSidebar() {
+  sidebar.classList.add('open');
+  sidebarOverlay.classList.add('active');
+}
+
+function closeSidebar() {
+  sidebar.classList.remove('open');
+  sidebarOverlay.classList.remove('active');
+}
+
 document.getElementById('menuToggle').addEventListener('click', () => {
-  document.getElementById('sidebar').classList.toggle('open');
+  sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
 });
+
+sidebarOverlay.addEventListener('click', closeSidebar);
+
+// swipe left on sidebar to close
+let sbTouchStartX = 0;
+let sbTouchStartY = 0;
+
+sidebar.addEventListener('touchstart', e => {
+  sbTouchStartX = e.touches[0].clientX;
+  sbTouchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+sidebar.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - sbTouchStartX;
+  const dy = e.changedTouches[0].clientY - sbTouchStartY;
+  if (dx < -40 && Math.abs(dy) < Math.abs(dx)) {
+    closeSidebar();
+  }
+}, { passive: true });
 
 // ── Init ──────────────────────────────────────
 
