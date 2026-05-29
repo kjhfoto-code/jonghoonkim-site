@@ -221,15 +221,17 @@ document.addEventListener('keydown', e => {
   const lb = document.getElementById('lightbox');
 
   lb.addEventListener('touchstart', e => {
-    touchStartX = e.changedTouches[0].clientX;
-  }, { passive: true });
+    touchStartX = e.touches[0].clientX;
+    e.preventDefault();
+  }, { passive: false });
 
   lb.addEventListener('touchend', e => {
-    if (document.getElementById('lightbox').classList.contains('hidden')) return;
+    if (lb.classList.contains('hidden')) return;
     const dx = e.changedTouches[0].clientX - touchStartX;
     if (Math.abs(dx) < SWIPE_THRESHOLD) return;
+    e.preventDefault();
     dx < 0 ? lbNext() : lbPrev();
-  }, { passive: true });
+  }, { passive: false });
 }());
 
 document.querySelectorAll('.nav-link').forEach(a => {
