@@ -166,10 +166,22 @@ function renderGallery(project) {
 
 // ── Lightbox ──────────────────────────────────
 
+function applyLightboxSize(img) {
+  if (img.naturalWidth >= img.naturalHeight) {
+    img.style.width = '90vw';
+    img.style.height = 'auto';
+  } else {
+    img.style.width = 'auto';
+    img.style.height = '90vh';
+  }
+}
+
 function openLightbox(index) {
   lightboxIndex = index;
   const img = document.getElementById('lbImg');
   img.classList.remove('slide-next', 'slide-prev');
+  img.style.cssText = '';
+  img.onload = () => applyLightboxSize(img);
   img.src = `gimgs/${lightboxImages[lightboxIndex]}`;
   document.getElementById('lightbox').classList.remove('hidden');
   document.body.style.overflow = 'hidden';
@@ -184,8 +196,12 @@ function slideTo(direction) {
   const img = document.getElementById('lbImg');
   img.classList.remove('slide-next', 'slide-prev');
   void img.offsetWidth;
+  img.style.cssText = '';
+  img.onload = () => {
+    applyLightboxSize(img);
+    img.classList.add(direction === 'next' ? 'slide-next' : 'slide-prev');
+  };
   img.src = `gimgs/${lightboxImages[lightboxIndex]}`;
-  img.classList.add(direction === 'next' ? 'slide-next' : 'slide-prev');
 }
 
 function lbPrev() {
