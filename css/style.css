@@ -340,7 +340,7 @@ body {
     background: none;
     border: none;
     color: #2e2e2e;
-    font-size: clamp(20px, 2.5vw, 40px) !important;
+    font-size: clamp(14px, 1.5vw, 28px) !important;
     cursor: pointer;
     padding: 0 !important;
     line-height: 1 !important;
