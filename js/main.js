@@ -226,20 +226,28 @@ document.addEventListener('keydown', e => {
 
 (function () {
   let touchStartX = 0;
+  let touchStartY = 0;
   const SWIPE_THRESHOLD = 50;
+  const TAP_THRESHOLD = 10;
   const lb = document.getElementById('lightbox');
 
   lb.addEventListener('touchstart', e => {
     touchStartX = e.touches[0].clientX;
-    e.preventDefault();
-  }, { passive: false });
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
 
   lb.addEventListener('touchend', e => {
     if (lb.classList.contains('hidden')) return;
     const dx = e.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(dx) < SWIPE_THRESHOLD) return;
-    e.preventDefault();
-    dx < 0 ? lbNext() : lbPrev();
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (dist < TAP_THRESHOLD) return; // tap — let click events fire naturally
+
+    e.preventDefault(); // moved enough: prevent synthetic click
+    if (Math.abs(dx) >= SWIPE_THRESHOLD) {
+      dx < 0 ? lbNext() : lbPrev();
+    }
   }, { passive: false });
 }());
 

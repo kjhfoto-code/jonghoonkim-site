@@ -90,10 +90,10 @@ body {
 
 .nav-category {
     display: block;
-    font-size: 9px;
+    font-size: 11px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: #333;
+    color: #aaa;
     margin-bottom: 10px;
 }
 
