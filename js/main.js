@@ -167,13 +167,27 @@ function renderGallery(project) {
 // ── Lightbox ──────────────────────────────────
 
 function applyLightboxSize(img) {
-  if (img.naturalWidth >= img.naturalHeight) {
-    img.style.width = `min(${img.naturalWidth * 2}px, 75vw)`;
-    img.style.height = 'auto';
+  const maxW = Math.min(img.naturalWidth * 2, window.innerWidth * 0.75);
+  const maxH = Math.min(img.naturalHeight * 2, window.innerHeight * 0.75);
+
+  let w, h;
+  if (img.naturalWidth / img.naturalHeight >= maxW / maxH) {
+    w = maxW;
+    h = img.naturalHeight * (maxW / img.naturalWidth);
   } else {
-    img.style.width = 'auto';
-    img.style.height = `min(${img.naturalHeight * 2}px, 75vh)`;
+    h = maxH;
+    w = img.naturalWidth * (maxH / img.naturalHeight);
   }
+  img.style.width  = w + 'px';
+  img.style.height = h + 'px';
+
+  const imgLeft  = (window.innerWidth - w) / 2;
+  const prev = document.getElementById('lbPrev');
+  const next = document.getElementById('lbNext');
+  prev.style.left  = Math.max(0, imgLeft - 80) + 'px';
+  prev.style.right = 'auto';
+  next.style.right = Math.max(0, imgLeft - 80) + 'px';
+  next.style.left  = 'auto';
 }
 
 function openLightbox(index) {
@@ -232,6 +246,14 @@ document.getElementById('lbImg').addEventListener('click', e => {
   e.stopPropagation();
 });
 document.getElementById('lightbox').addEventListener('click', closeLightbox);
+
+window.addEventListener('resize', () => {
+  const lb  = document.getElementById('lightbox');
+  const img = document.getElementById('lbImg');
+  if (!lb.classList.contains('hidden') && img.complete && img.naturalWidth) {
+    applyLightboxSize(img);
+  }
+});
 
 document.addEventListener('keydown', e => {
   if (document.getElementById('lightbox').classList.contains('hidden')) return;
