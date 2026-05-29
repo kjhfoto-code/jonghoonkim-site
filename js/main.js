@@ -200,13 +200,22 @@ function lbNext() {
 
 // ── Event listeners ───────────────────────────
 
-document.getElementById('lbClose').addEventListener('click', closeLightbox);
-document.getElementById('lbPrev').addEventListener('click', lbPrev);
-document.getElementById('lbNext').addEventListener('click', lbNext);
-
-document.getElementById('lightbox').addEventListener('click', e => {
-  if (e.target === document.getElementById('lightbox')) closeLightbox();
+document.getElementById('lbClose').addEventListener('click', e => {
+  e.stopPropagation();
+  closeLightbox();
 });
+document.getElementById('lbPrev').addEventListener('click', e => {
+  e.stopPropagation();
+  lbPrev();
+});
+document.getElementById('lbNext').addEventListener('click', e => {
+  e.stopPropagation();
+  lbNext();
+});
+document.getElementById('lbImg').addEventListener('click', e => {
+  e.stopPropagation();
+});
+document.getElementById('lightbox').addEventListener('click', closeLightbox);
 
 document.addEventListener('keydown', e => {
   if (document.getElementById('lightbox').classList.contains('hidden')) return;
