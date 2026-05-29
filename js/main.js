@@ -168,11 +168,11 @@ function renderGallery(project) {
 
 function applyLightboxSize(img) {
   if (img.naturalWidth >= img.naturalHeight) {
-    img.style.width = '90vw';
+    img.style.width = `min(${img.naturalWidth * 2}px, 90vw)`;
     img.style.height = 'auto';
   } else {
     img.style.width = 'auto';
-    img.style.height = '90vh';
+    img.style.height = `min(${img.naturalHeight * 2}px, 90vh)`;
   }
 }
 
