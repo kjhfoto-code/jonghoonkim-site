@@ -168,11 +168,11 @@ function renderGallery(project) {
 
 function applyLightboxSize(img) {
   if (img.naturalWidth >= img.naturalHeight) {
-    img.style.width = `min(${img.naturalWidth * 2}px, 90vw)`;
+    img.style.width = `min(${img.naturalWidth * 2}px, 75vw)`;
     img.style.height = 'auto';
   } else {
     img.style.width = 'auto';
-    img.style.height = `min(${img.naturalHeight * 2}px, 90vh)`;
+    img.style.height = `min(${img.naturalHeight * 2}px, 75vh)`;
   }
 }
 
@@ -293,20 +293,55 @@ document.getElementById('menuToggle').addEventListener('click', () => {
 
 sidebarOverlay.addEventListener('click', closeSidebar);
 
-// swipe left on sidebar to close
+// drag sidebar to close (real-time follow)
 let sbTouchStartX = 0;
 let sbTouchStartY = 0;
+let sbDragging = false;
+let sbDirectionKnown = false;
 
 sidebar.addEventListener('touchstart', e => {
   sbTouchStartX = e.touches[0].clientX;
   sbTouchStartY = e.touches[0].clientY;
+  sbDragging = false;
+  sbDirectionKnown = false;
+}, { passive: true });
+
+sidebar.addEventListener('touchmove', e => {
+  if (!sidebar.classList.contains('open')) return;
+  const dx = e.touches[0].clientX - sbTouchStartX;
+  const dy = e.touches[0].clientY - sbTouchStartY;
+
+  if (!sbDirectionKnown && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+    sbDirectionKnown = true;
+    sbDragging = Math.abs(dx) > Math.abs(dy) && dx < 0;
+    if (sbDragging) sidebar.style.transition = 'none';
+  }
+
+  if (!sbDragging) return;
+  sidebar.style.transform = `translateX(${dx}px)`;
 }, { passive: true });
 
 sidebar.addEventListener('touchend', e => {
+  if (!sbDragging) return;
+  sbDragging = false;
+
   const dx = e.changedTouches[0].clientX - sbTouchStartX;
-  const dy = e.changedTouches[0].clientY - sbTouchStartY;
-  if (dx < -40 && Math.abs(dy) < Math.abs(dx)) {
-    closeSidebar();
+  sidebar.style.transition = '';
+
+  if (Math.abs(dx) > sidebar.offsetWidth * 0.5) {
+    sidebar.style.transform = 'translateX(-100%)';
+    sidebar.addEventListener('transitionend', function cleanup() {
+      sidebar.removeEventListener('transitionend', cleanup);
+      sidebar.style.transform = '';
+      sidebar.classList.remove('open');
+      sidebarOverlay.classList.remove('active');
+    });
+  } else {
+    sidebar.style.transform = 'translateX(0)';
+    sidebar.addEventListener('transitionend', function cleanup() {
+      sidebar.removeEventListener('transitionend', cleanup);
+      sidebar.style.transform = '';
+    });
   }
 }, { passive: true });
 
