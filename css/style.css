@@ -362,7 +362,7 @@ body {
     white-space: nowrap;
 }
 
-.lb-close:hover { color: #555; }
+.lb-close:hover { color: #aaa; }
 
 .lb-prev,
 .lb-next {
@@ -385,7 +385,11 @@ body {
 .lb-next { right: 0; }
 
 .lb-prev:hover,
-.lb-next:hover { color: #555; }
+.lb-next:hover { color: #aaa !important; }
+
+.lb-prev:active,
+.lb-next:active,
+.lb-close:active { color: #ccc !important; }
 
 /* ── Mobile menu toggle ──────────────────────── */
 
@@ -464,6 +468,9 @@ body {
 
 @media (orientation: landscape) {
     .lb-close { top: 8px; font-size: clamp(10px, 1.2vw, 20px) !important; }
+}
+
+@media (orientation: landscape) and (max-width: 1024px) {
     .lb-prev, .lb-next  { color: #fff; opacity: 0.08; background: none; }
     .lb-prev:active, .lb-next:active { opacity: 0.9; }
 }
