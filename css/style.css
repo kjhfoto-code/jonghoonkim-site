@@ -323,8 +323,8 @@ body {
     display: block;
     object-fit: contain;
     user-select: none;
-    max-width: 75vw;
-    max-height: 75vh;
+    max-width: clamp(75vw, 95vw, 100vw);
+    max-height: clamp(75vh, 88vh, 85vh);
     width: auto;
     height: auto;
 }
@@ -452,8 +452,7 @@ body {
         padding: 56px 18px 60px;
     }
 
-    #lbImg { max-width: 100vw; max-height: 85vh; }
-    .lb-close { top: 60px; }
+.lb-close { top: 60px; }
     .lb-prev, .lb-next  { color: #fff; opacity: 0.08; background: none; }
     .lb-prev:active, .lb-next:active { opacity: 0.9; }
 }
