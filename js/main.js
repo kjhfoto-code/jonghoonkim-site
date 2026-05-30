@@ -167,48 +167,27 @@ function renderGallery(project) {
 // ── Lightbox ──────────────────────────────────
 
 function applyLightboxSize(img) {
+  const r        = img.getBoundingClientRect();
   const isMobile = window.innerWidth <= 768 || window.innerHeight <= 500;
-  const wRatio   = isMobile ? 1.0  : 0.75;
-  const hRatio   = isMobile ? 0.85 : 0.75;
-
-  const maxW = Math.min(img.naturalWidth  * 2, window.innerWidth  * wRatio);
-  const maxH = Math.min(img.naturalHeight * 2, window.innerHeight * hRatio);
-
-  let w, h;
-  if (img.naturalWidth / img.naturalHeight >= maxW / maxH) {
-    w = maxW;
-    h = img.naturalHeight * (maxW / img.naturalWidth);
-  } else {
-    h = maxH;
-    w = img.naturalWidth * (maxH / img.naturalHeight);
-  }
-  img.style.width  = w + 'px';
-  img.style.height = h + 'px';
-
-  const imgTop  = (window.innerHeight - h) / 2;
-  const close   = document.getElementById('lbClose');
-  const closeH  = close.offsetHeight || 30;
+  const close    = document.getElementById('lbClose');
+  const closeH   = close.offsetHeight || 30;
+  const prev     = document.getElementById('lbPrev');
+  const next     = document.getElementById('lbNext');
 
   if (isMobile) {
-    const imgLeft = (window.innerWidth - w) / 2;
-    const prev    = document.getElementById('lbPrev');
-    const next    = document.getElementById('lbNext');
-    prev.style.left  = (imgLeft + 15) + 'px';
+    prev.style.left  = (r.left + 15) + 'px';
     prev.style.right = 'auto';
-    next.style.right = (imgLeft + 15) + 'px';
+    next.style.right = (window.innerWidth - r.right + 15) + 'px';
     next.style.left  = 'auto';
-    close.style.top  = Math.max(8, imgTop - closeH - 8) + 'px';
+    close.style.top  = Math.max(8, r.top - closeH - 8) + 'px';
   } else {
-    const imgLeft = (window.innerWidth - w) / 2;
-    const prev  = document.getElementById('lbPrev');
-    const next  = document.getElementById('lbNext');
     const prevW = prev.offsetWidth  || 40;
     const nextW = next.offsetWidth  || 40;
-    prev.style.left  = Math.min(imgLeft - prevW,  Math.max(0, imgLeft - 80)) + 'px';
+    prev.style.left  = Math.min(r.left - prevW,  Math.max(0, r.left - 80)) + 'px';
     prev.style.right = 'auto';
-    next.style.right = Math.min(imgLeft - nextW,  Math.max(0, imgLeft - 80)) + 'px';
+    next.style.right = Math.min(window.innerWidth - r.right - nextW, Math.max(0, window.innerWidth - r.right - 80)) + 'px';
     next.style.left  = 'auto';
-    close.style.top  = Math.min(imgTop - closeH, Math.max(0, imgTop - 80)) + 'px';
+    close.style.top  = Math.min(r.top - closeH, Math.max(0, r.top - 80)) + 'px';
   }
 }
 
@@ -223,9 +202,9 @@ function openLightbox(index) {
     img.style.opacity = '1';
   };
   img.src = `gimgs/${lightboxImages[lightboxIndex]}`;
-  if (img.complete && img.naturalWidth > 0) { img.onload(); img.onload = null; }
   document.getElementById('lightbox').classList.remove('hidden');
   document.body.style.overflow = 'hidden';
+  if (img.complete && img.naturalWidth > 0) { img.onload(); img.onload = null; }
 }
 
 function closeLightbox() {
