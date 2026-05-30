@@ -323,7 +323,6 @@ body {
     display: block;
     object-fit: contain;
     user-select: none;
-    transition: opacity 0.25s ease;
     max-width: 75vw;
     max-height: 75vh;
     width: auto;
@@ -331,15 +330,20 @@ body {
 }
 
 @keyframes slideFromRight {
-    from { transform: translateX(50px); opacity: 0; }
-    to   { transform: translateX(0);    opacity: 1; }
+    from { transform: translateX(50px); }
+    to   { transform: translateX(0); }
 }
 @keyframes slideFromLeft {
-    from { transform: translateX(-50px); opacity: 0; }
-    to   { transform: translateX(0);     opacity: 1; }
+    from { transform: translateX(-50px); }
+    to   { transform: translateX(0); }
 }
-#lbImg.slide-next { animation: slideFromRight 0.28s ease; }
-#lbImg.slide-prev { animation: slideFromLeft  0.28s ease; }
+@keyframes lbFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+#lbImg.slide-next  { animation: slideFromRight 0.28s ease; }
+#lbImg.slide-prev  { animation: slideFromLeft  0.28s ease; }
+#lbImg.lb-fadein   { animation: lbFadeIn       0.25s ease forwards; }
 
 .lb-close {
     position: fixed;
@@ -448,6 +452,7 @@ body {
         padding: 56px 18px 60px;
     }
 
+    #lbImg { max-width: 100vw; max-height: 85vh; }
     .lb-close { top: 60px; }
     .lb-prev, .lb-next  { color: #fff; opacity: 0.08; background: none; }
     .lb-prev:active, .lb-next:active { opacity: 0.9; }
