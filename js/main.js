@@ -210,6 +210,7 @@ function openLightbox(index) {
     img.src = src;
     document.getElementById('lightbox').classList.remove('hidden');
     document.body.style.overflow = 'hidden';
+    document.getElementById('main-content').style.pointerEvents = 'none';
     applyLightboxSize(img);
     void img.offsetWidth;
     img.classList.add('lb-fadein');
@@ -224,6 +225,7 @@ function openLightbox(index) {
 function closeLightbox() {
   document.getElementById('lightbox').classList.add('hidden');
   document.body.style.overflow = '';
+  document.getElementById('main-content').style.pointerEvents = '';
 }
 
 function slideTo(direction) {
@@ -267,10 +269,40 @@ document.getElementById('lbNext').addEventListener('click', e => {
   e.stopPropagation();
   lbNext();
 });
-document.getElementById('lbImg').addEventListener('click', e => {
-  e.stopPropagation();
+function getContainRect(img) {
+  const box = img.getBoundingClientRect();
+  const nw = img.naturalWidth;
+  const nh = img.naturalHeight;
+  if (!nw || !nh) return box;
+  const imgRatio = nw / nh;
+  const boxRatio = box.width / box.height;
+  let rw, rh;
+  if (imgRatio > boxRatio) {
+    rw = box.width;
+    rh = box.width / imgRatio;
+  } else {
+    rh = box.height;
+    rw = box.height * imgRatio;
+  }
+  const left = box.left + (box.width - rw) / 2;
+  const top  = box.top  + (box.height - rh) / 2;
+  return { left, top, right: left + rw, bottom: top + rh };
+}
+
+document.getElementById('lightbox').addEventListener('click', e => {
+  console.log('lightbox clicked', e.target, e.clientX, e.clientY);
+  const lbImg = document.getElementById('lbImg');
+  if (e.target !== document.getElementById('lightbox') && e.target !== lbImg) return;
+  const r = getContainRect(lbImg);
+  if (
+    e.clientX < r.left   ||
+    e.clientX > r.right  ||
+    e.clientY < r.top    ||
+    e.clientY > r.bottom
+  ) {
+    closeLightbox();
+  }
 });
-document.getElementById('lightbox').addEventListener('click', closeLightbox);
 
 window.addEventListener('resize', () => {
   const lb  = document.getElementById('lightbox');
@@ -550,10 +582,10 @@ document.addEventListener('keydown', e => {
 
   // Capture-phase click handler: eat the synthetic click that fires after a drag ends
   lb.addEventListener('click', e => {
-    if (mouseDragged) {
+    if (mouseDragged && Math.abs(currentDx) > 5) {
       e.stopImmediatePropagation();
-      mouseDragged = false;
     }
+    mouseDragged = false;
   }, true);
 
   // Prevent browser's native image drag
