@@ -119,13 +119,16 @@ body {
     margin-top: 28px;
 }
 
-.nav-bio a {
-    color: var(--text-dim);
+.nav-bio .nav-link {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #aaa;
     text-decoration: none;
     transition: color 0.2s;
 }
 
-.nav-bio a:hover {
+.nav-bio .nav-link:hover {
     color: var(--accent);
 }
 
