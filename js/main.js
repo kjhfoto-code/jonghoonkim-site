@@ -358,12 +358,20 @@ document.addEventListener('keydown', e => {
 });
 
 let wheelLastTime = 0;
+let wheelCoolingDown = false;
+const WHEEL_COOLDOWN = 500;
+const WHEEL_THRESHOLD = 30;
+
 document.addEventListener('wheel', e => {
   if (document.getElementById('lightbox').classList.contains('hidden')) return;
   e.preventDefault();
   const now = Date.now();
-  if (now - wheelLastTime < 420) return;
+  if (now - wheelLastTime > 200) wheelCoolingDown = false;
   wheelLastTime = now;
+  if (wheelCoolingDown) return;
+  if (Math.abs(e.deltaY) < WHEEL_THRESHOLD) return;
+  wheelCoolingDown = true;
+  setTimeout(() => { wheelCoolingDown = false; }, WHEEL_COOLDOWN);
   if (e.deltaY > 0) lbNext();
   else lbPrev();
 }, { passive: false });
