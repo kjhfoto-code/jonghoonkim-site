@@ -229,16 +229,54 @@ function closeLightbox() {
 }
 
 function slideTo(direction) {
-  const img = document.getElementById('lbImg');
+  const img  = document.getElementById('lbImg');
+  const lb   = document.getElementById('lightbox');
+  const rect = img.getBoundingClientRect();
+
+  const exitX  = direction === 'next' ? '-110%' : '110%';
+  const enterX = direction === 'next' ?  '110%' : '-110%';
+
+  const oldGhost = document.getElementById('lbSlideGhost');
+  if (oldGhost) oldGhost.remove();
+  const ghost = document.createElement('img');
+  ghost.id  = 'lbSlideGhost';
+  ghost.src = img.src;
+  ghost.style.cssText = [
+    'position:fixed',
+    `left:${rect.left}px`,
+    `top:${rect.top}px`,
+    `width:${rect.width}px`,
+    `height:${rect.height}px`,
+    'pointer-events:none',
+    'z-index:1005',
+    'object-fit:contain',
+  ].join(';');
+  lb.appendChild(ghost);
+
   const src = `gimgs/${lightboxImages[lightboxIndex]}`;
+  img.style.transition = 'none';
+  img.style.transform  = `translateX(${enterX})`;
+
   function show() {
     img.classList.remove('slide-next', 'slide-prev', 'lb-fadein');
-    void img.offsetWidth;
     img.src = src;
-    applyLightboxSize(img);
-    img.classList.add(direction === 'next' ? 'slide-next' : 'slide-prev');
-    preloadAdjacent(lightboxIndex);
+    void img.offsetWidth;
+
+    const t = 'transform 0.42s cubic-bezier(0.25, 0.1, 0.25, 1)';
+    ghost.style.transition = t;
+    ghost.style.transform  = `translateX(${exitX})`;
+    img.style.transition   = t;
+    img.style.transform    = 'translateX(0)';
+
+    setTimeout(() => {
+      ghost.remove();
+      img.style.transition = '';
+      img.style.transform  = '';
+      applyLightboxSize(img);
+      preloadAdjacent(lightboxIndex);
+    }, 420);
   }
+
   const preload = new Image();
   preload.onload = show;
   preload.src = src;
@@ -289,6 +327,7 @@ function getContainRect(img) {
   return { left, top, right: left + rw, bottom: top + rh };
 }
 
+
 document.getElementById('lightbox').addEventListener('click', e => {
   console.log('lightbox clicked', e.target, e.clientX, e.clientY);
   const lbImg = document.getElementById('lbImg');
@@ -318,6 +357,17 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft') lbPrev();
   if (e.key === 'ArrowRight') lbNext();
 });
+
+let wheelLastTime = 0;
+document.addEventListener('wheel', e => {
+  if (document.getElementById('lightbox').classList.contains('hidden')) return;
+  e.preventDefault();
+  const now = Date.now();
+  if (now - wheelLastTime < 420) return;
+  wheelLastTime = now;
+  if (e.deltaY > 0) lbNext();
+  else lbPrev();
+}, { passive: false });
 
 (function () {
   const lb  = document.getElementById('lightbox');
