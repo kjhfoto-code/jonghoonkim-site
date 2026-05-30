@@ -190,15 +190,14 @@ function applyLightboxSize(img) {
   const closeH  = close.offsetHeight || 30;
 
   if (isMobile) {
-    // prev/next: CSS handles left:4px / right:4px via media query
-    const prev = document.getElementById('lbPrev');
-    const next = document.getElementById('lbNext');
-    prev.style.left  = '';
-    prev.style.right = '';
-    next.style.left  = '';
-    next.style.right = '';
-    // close: 8px above image top, clamped to minimum 8px from top
-    close.style.top = Math.max(8, imgTop - closeH - 8) + 'px';
+    const imgLeft = (window.innerWidth - w) / 2;
+    const prev    = document.getElementById('lbPrev');
+    const next    = document.getElementById('lbNext');
+    prev.style.left  = (imgLeft + 15) + 'px';
+    prev.style.right = 'auto';
+    next.style.right = (imgLeft + 15) + 'px';
+    next.style.left  = 'auto';
+    close.style.top  = Math.max(8, imgTop - closeH - 8) + 'px';
   } else {
     const imgLeft = (window.innerWidth - w) / 2;
     const prev  = document.getElementById('lbPrev');
@@ -292,6 +291,7 @@ document.addEventListener('keydown', e => {
   let startX      = 0;
   let startY      = 0;
   let currentDx   = 0;
+  let currentDy   = 0;
   let isDragging  = false;
   let isHoriz     = null; // null=undecided, true=horizontal, false=vertical
   let adjEl       = null;
@@ -328,6 +328,29 @@ document.addEventListener('keydown', e => {
 
   function removeAdj() {
     if (adjEl) { adjEl.remove(); adjEl = null; }
+  }
+
+  function snapBackVertical() {
+    img.style.transition = `transform ${ANIM_MS}ms ease, opacity ${ANIM_MS}ms ease`;
+    img.style.transform  = '';
+    img.style.opacity    = '';
+    setTimeout(() => { img.style.transition = ''; }, ANIM_MS + 20);
+    isDragging = false;
+    currentDy  = 0;
+  }
+
+  function closeWithAnimation() {
+    img.style.transition = 'transform 280ms ease, opacity 280ms ease';
+    img.style.transform  = `translateY(${window.innerHeight}px)`;
+    img.style.opacity    = '0';
+    isDragging = false;
+    currentDy  = 0;
+    setTimeout(() => {
+      closeLightbox();
+      img.style.transition = '';
+      img.style.transform  = '';
+      img.style.opacity    = '';
+    }, 300);
   }
 
   function snapBack() {
@@ -381,6 +404,7 @@ document.addEventListener('keydown', e => {
     startX     = e.touches[0].clientX;
     startY     = e.touches[0].clientY;
     currentDx  = 0;
+    currentDy  = 0;
     isDragging = false;
     isHoriz    = null;
     swipeDir   = null;
@@ -398,29 +422,43 @@ document.addEventListener('keydown', e => {
     if (isHoriz === null) {
       if (Math.abs(dx) <= 5 && Math.abs(dy) <= 5) return;
       isHoriz = Math.abs(dx) > Math.abs(dy);
-      if (!isHoriz) return;
-    } else if (!isHoriz) {
-      return;
     }
 
-    e.preventDefault();
-    isDragging = true;
-    currentDx  = dx;
+    if (isHoriz) {
+      e.preventDefault();
+      isDragging = true;
+      currentDx  = dx;
 
-    const newDir = dx < 0 ? 'next' : 'prev';
-    if (swipeDir !== newDir) {
-      removeAdj();
-      swipeDir = newDir;
-      adjEl    = createAdjEl(swipeDir);
+      const newDir = dx < 0 ? 'next' : 'prev';
+      if (swipeDir !== newDir) {
+        removeAdj();
+        swipeDir = newDir;
+        adjEl    = createAdjEl(swipeDir);
+      }
+
+      img.style.transform = `translateX(${dx}px)`;
+      const base = swipeDir === 'next' ? window.innerWidth : -window.innerWidth;
+      adjEl.style.transform = `translateX(${base + dx}px)`;
+    } else {
+      if (dy <= 0) return;
+      e.preventDefault();
+      isDragging = true;
+      currentDy  = dy;
+      img.style.transform = `translateY(${dy}px)`;
+      img.style.opacity   = String(Math.max(0, 1 - dy / (window.innerHeight * 0.4)));
     }
-
-    img.style.transform = `translateX(${dx}px)`;
-    const base = swipeDir === 'next' ? window.innerWidth : -window.innerWidth;
-    adjEl.style.transform = `translateX(${base + dx}px)`;
   }, { passive: false });
 
   lb.addEventListener('touchend', () => {
     if (!isDragging) { removeAdj(); return; }
+    if (!isHoriz) {
+      if (currentDy >= window.innerHeight * 0.10) {
+        closeWithAnimation();
+      } else {
+        snapBackVertical();
+      }
+      return;
+    }
     const ratio = window.innerWidth > window.innerHeight ? COMMIT_RATIO / 2 : COMMIT_RATIO;
     if (Math.abs(currentDx) >= window.innerWidth * ratio) {
       commitSwipe();
@@ -430,7 +468,11 @@ document.addEventListener('keydown', e => {
   }, { passive: true });
 
   lb.addEventListener('touchcancel', () => {
-    if (isDragging) snapBack(); else removeAdj();
+    if (isDragging) {
+      if (!isHoriz) snapBackVertical(); else snapBack();
+    } else {
+      removeAdj();
+    }
   }, { passive: true });
 
   // Mouse drag (desktop)
