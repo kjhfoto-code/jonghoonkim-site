@@ -217,7 +217,11 @@ function openLightbox(index) {
   const img = document.getElementById('lbImg');
   img.classList.remove('slide-next', 'slide-prev');
   img.style.cssText = '';
-  img.onload = () => applyLightboxSize(img);
+  img.style.opacity = '0';
+  img.onload = () => {
+    applyLightboxSize(img);
+    img.style.opacity = '1';
+  };
   img.src = `gimgs/${lightboxImages[lightboxIndex]}`;
   document.getElementById('lightbox').classList.remove('hidden');
   document.body.style.overflow = 'hidden';
@@ -392,8 +396,13 @@ document.addEventListener('keydown', e => {
         : (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
       img.style.transition = 'none';
       img.style.transform  = '';
+      img.style.opacity    = '0';
       img.classList.remove('slide-next', 'slide-prev');
-      img.onload = () => applyLightboxSize(img);
+      img.onload = () => {
+        applyLightboxSize(img);
+        img.style.transition = '';
+        img.style.opacity    = '1';
+      };
       img.src    = `gimgs/${lightboxImages[lightboxIndex]}`;
       if (ref) ref.remove();
     }, ANIM_MS + 10);
@@ -581,8 +590,10 @@ let sbActive   = false;
 let sbMode     = null; // 'open' | 'close'
 let sbWidth    = 0;
 let sbDirKnown = false;
+let sbCooldown = false;
 
 document.addEventListener('touchstart', e => {
+  if (sbCooldown) return;
   if (!document.getElementById('lightbox').classList.contains('hidden')) return;
   if (e.touches.length !== 1) return;
   const x = e.touches[0].clientX;
@@ -628,6 +639,8 @@ document.addEventListener('touchend', e => {
   const mode = sbMode;
   sbActive   = false;
   sbMode     = null;
+  sbCooldown = true;
+  setTimeout(() => { sbCooldown = false; }, 300);
   const pos  = mode === 'open'
     ? Math.min(0, -sbWidth + dx)
     : Math.min(0, dx);
