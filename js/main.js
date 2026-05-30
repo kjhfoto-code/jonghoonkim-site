@@ -574,74 +574,81 @@ document.getElementById('menuToggle').addEventListener('click', () => {
 
 sidebarOverlay.addEventListener('click', closeSidebar);
 
-// drag sidebar to close (real-time follow)
-let sbTouchStartX = 0;
-let sbTouchStartY = 0;
-let sbDragging = false;
-let sbDirectionKnown = false;
+// Unified sidebar swipe — open from left edge / close by dragging left
+let sbStartX   = 0;
+let sbStartY   = 0;
+let sbActive   = false;
+let sbMode     = null; // 'open' | 'close'
+let sbWidth    = 0;
+let sbDirKnown = false;
 
-sidebar.addEventListener('touchstart', e => {
-  sbTouchStartX = e.touches[0].clientX;
-  sbTouchStartY = e.touches[0].clientY;
-  sbDragging = false;
-  sbDirectionKnown = false;
-}, { passive: true });
-
-sidebar.addEventListener('touchmove', e => {
-  if (!sidebar.classList.contains('open')) return;
-  const dx = e.touches[0].clientX - sbTouchStartX;
-  const dy = e.touches[0].clientY - sbTouchStartY;
-
-  if (!sbDirectionKnown && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
-    sbDirectionKnown = true;
-    sbDragging = Math.abs(dx) > Math.abs(dy) && dx < 0;
-    if (sbDragging) sidebar.style.transition = 'none';
+document.addEventListener('touchstart', e => {
+  if (!document.getElementById('lightbox').classList.contains('hidden')) return;
+  if (e.touches.length !== 1) return;
+  const x = e.touches[0].clientX;
+  const y = e.touches[0].clientY;
+  if (sidebar.classList.contains('open')) {
+    sbMode = 'close';
+  } else if (x <= window.innerWidth * 0.20) {
+    sbMode = 'open';
+  } else {
+    sbMode = null;
+    return;
   }
-
-  if (!sbDragging) return;
-  sidebar.style.transform = `translateX(${dx}px)`;
+  sbStartX   = x;
+  sbStartY   = y;
+  sbActive   = false;
+  sbDirKnown = false;
+  sbWidth    = sidebar.offsetWidth;
 }, { passive: true });
 
-sidebar.addEventListener('touchend', e => {
-  if (!sbDragging) return;
-  sbDragging = false;
+document.addEventListener('touchmove', e => {
+  if (!sbMode || e.touches.length !== 1) return;
+  const dx = e.touches[0].clientX - sbStartX;
+  const dy = e.touches[0].clientY - sbStartY;
+  if (!sbDirKnown) {
+    if (Math.abs(dx) <= 5 && Math.abs(dy) <= 5) return;
+    if (Math.abs(dy) >= Math.abs(dx))      { sbMode = null; return; }
+    if (sbMode === 'open'  && dx <= 0)     { sbMode = null; return; }
+    if (sbMode === 'close' && dx >= 0)     { sbMode = null; return; }
+    sbDirKnown = true;
+    sbActive   = true;
+    sidebar.style.transition = 'none';
+  }
+  if (!sbActive) return;
+  const pos = sbMode === 'open'
+    ? Math.min(0, -sbWidth + dx)
+    : Math.min(0, dx);
+  sidebar.style.transform = `translateX(${pos}px)`;
+}, { passive: true });
 
-  const dx = e.changedTouches[0].clientX - sbTouchStartX;
+document.addEventListener('touchend', e => {
+  if (!sbActive) { sbMode = null; return; }
+  const dx   = e.changedTouches[0].clientX - sbStartX;
+  const mode = sbMode;
+  sbActive   = false;
+  sbMode     = null;
+  const pos  = mode === 'open'
+    ? Math.min(0, -sbWidth + dx)
+    : Math.min(0, dx);
   sidebar.style.transition = '';
-
-  if (Math.abs(dx) > sidebar.offsetWidth * 0.5) {
-    sidebar.style.transform = 'translateX(-100%)';
+  if (pos > -sbWidth / 2) {
+    sidebar.style.transform = 'translateX(0)';
+    sidebar.classList.add('open');
+    sidebarOverlay.classList.add('active');
+    sidebar.addEventListener('transitionend', function cleanup() {
+      sidebar.removeEventListener('transitionend', cleanup);
+      sidebar.style.transform = '';
+    });
+  } else {
+    sidebar.style.transform = `translateX(-${sbWidth}px)`;
     sidebar.addEventListener('transitionend', function cleanup() {
       sidebar.removeEventListener('transitionend', cleanup);
       sidebar.style.transform = '';
       sidebar.classList.remove('open');
       sidebarOverlay.classList.remove('active');
     });
-  } else {
-    sidebar.style.transform = 'translateX(0)';
-    sidebar.addEventListener('transitionend', function cleanup() {
-      sidebar.removeEventListener('transitionend', cleanup);
-      sidebar.style.transform = '';
-    });
   }
-}, { passive: true });
-
-// swipe from left edge to open sidebar
-document.addEventListener('touchstart', e => {
-  if (!document.getElementById('lightbox').classList.contains('hidden')) return;
-  if (sidebar.classList.contains('open')) return;
-  if (e.touches[0].clientX > window.innerWidth * 0.20) return;
-  sbTouchStartX = e.touches[0].clientX;
-  sbTouchStartY = e.touches[0].clientY;
-}, { passive: true });
-
-document.addEventListener('touchend', e => {
-  if (!document.getElementById('lightbox').classList.contains('hidden')) return;
-  if (sidebar.classList.contains('open')) return;
-  if (sbTouchStartX > window.innerWidth * 0.20) return;
-  const dx = e.changedTouches[0].clientX - sbTouchStartX;
-  const dy = e.changedTouches[0].clientY - sbTouchStartY;
-  if (dx >= 50 && Math.abs(dy) < Math.abs(dx)) openSidebar();
 }, { passive: true });
 
 // ── Init ──────────────────────────────────────
