@@ -359,7 +359,7 @@ document.addEventListener('keydown', e => {
 
 let wheelLastTime = 0;
 let wheelCoolingDown = false;
-const WHEEL_COOLDOWN = 500;
+const WHEEL_COOLDOWN = 250;
 const WHEEL_THRESHOLD = 30;
 
 document.addEventListener('wheel', e => {
