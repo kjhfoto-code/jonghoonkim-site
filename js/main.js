@@ -626,6 +626,24 @@ sidebar.addEventListener('touchend', e => {
   }
 }, { passive: true });
 
+// swipe from left edge to open sidebar
+document.addEventListener('touchstart', e => {
+  if (!document.getElementById('lightbox').classList.contains('hidden')) return;
+  if (sidebar.classList.contains('open')) return;
+  if (e.touches[0].clientX > window.innerWidth * 0.20) return;
+  sbTouchStartX = e.touches[0].clientX;
+  sbTouchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+document.addEventListener('touchend', e => {
+  if (!document.getElementById('lightbox').classList.contains('hidden')) return;
+  if (sidebar.classList.contains('open')) return;
+  if (sbTouchStartX > window.innerWidth * 0.20) return;
+  const dx = e.changedTouches[0].clientX - sbTouchStartX;
+  const dy = e.changedTouches[0].clientY - sbTouchStartY;
+  if (dx >= 50 && Math.abs(dy) < Math.abs(dx)) openSidebar();
+}, { passive: true });
+
 // ── Init ──────────────────────────────────────
 
 renderHome();
