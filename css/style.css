@@ -473,7 +473,7 @@ body {
 .lb-close { top: 60px; }
     .lb-prev, .lb-next  { color: #fff; opacity: 0.08; background: none; }
     .lb-prev:active, .lb-next:active { opacity: 0.9; }
-    #lbImg { width: auto; max-width: 100vw; max-height: 92vh; }
+    #lbImg { width: auto; max-width: 100vw; max-height: 92dvh; }
 }
 
 @media (max-width: 500px) {
@@ -488,5 +488,5 @@ body {
 @media (orientation: landscape) and (max-width: 1024px) {
     .lb-prev, .lb-next  { color: #fff; opacity: 0.08; background: none; }
     .lb-prev:active, .lb-next:active { opacity: 0.9; }
-    #lbImg { width: auto; max-width: 96vw; max-height: 96vh; }
+    #lbImg { width: auto; max-width: 96vw; max-height: 96dvh; }
 }
