@@ -119,6 +119,16 @@ body {
     margin-top: 28px;
 }
 
+.nav-bio a {
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.nav-bio a:hover {
+    color: var(--accent);
+}
+
 /* ── Main content ────────────────────────────── */
 
 #main-content {
@@ -195,7 +205,7 @@ body {
     font-size: 9px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.38);
+    color: rgba(255,255,255,0.75);
     margin-bottom: 4px;
 }
 
@@ -203,7 +213,7 @@ body {
     display: block;
     font-size: 12px;
     letter-spacing: 0.06em;
-    color: #fff;
+    color: rgba(255,255,255,0.75);
     font-weight: 400;
 }
 
