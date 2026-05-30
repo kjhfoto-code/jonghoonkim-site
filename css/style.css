@@ -57,6 +57,13 @@ body {
     text-transform: uppercase;
     cursor: pointer;
     text-decoration: none;
+    transition: color 0.3s ease, letter-spacing 0.3s ease, opacity 0.3s ease;
+}
+
+.site-title:hover {
+    color: #aaa;
+    letter-spacing: 0.25em;
+    opacity: 0.6;
 }
 
 .nav-list {
