@@ -243,13 +243,14 @@ body {
 
 .bio-layout {
     display: grid;
-    grid-template-columns: 280px 1fr;
+    grid-template-columns: 218px 1fr;
     gap: 52px;
     align-items: start;
 }
 
 .bio-photo img {
     width: 100%;
+    height: auto;
     display: block;
     border-radius: 4px;
 }
