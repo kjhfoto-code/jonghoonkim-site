@@ -134,7 +134,7 @@ function renderHome() {
     card.innerHTML = `
       <img src="gimgs/${project.images[0]}" alt="${project.title}" loading="lazy">
       <div class="home-card-meta">
-        <span class="home-card-category">${project.category}</span>
+
         <span class="home-card-title">${project.title}</span>
       </div>
     `;
@@ -283,7 +283,7 @@ document.addEventListener('keydown', e => {
   let adjEl       = null;
   let swipeDir    = null; // 'next' | 'prev'
 
-  const COMMIT_RATIO = 0.15;
+  const COMMIT_RATIO = 0.10;
   const ANIM_MS      = 240;
 
   function adjIndex(dir) {
