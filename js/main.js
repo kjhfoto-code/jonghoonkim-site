@@ -191,6 +191,14 @@ function applyLightboxSize(img) {
   }
 }
 
+function preloadAdjacent(index) {
+  const n = lightboxImages.length;
+  [-2, -1, 1, 2].forEach(offset => {
+    const i = (index + offset + n) % n;
+    new Image().src = `gimgs/${lightboxImages[i]}`;
+  });
+}
+
 function openLightbox(index) {
   lightboxIndex = index;
   const img = document.getElementById('lbImg');
@@ -205,6 +213,7 @@ function openLightbox(index) {
     applyLightboxSize(img);
     void img.offsetWidth;
     img.classList.add('lb-fadein');
+    preloadAdjacent(index);
   }
   const preload = new Image();
   preload.onload = show;
@@ -226,6 +235,7 @@ function slideTo(direction) {
     img.src = src;
     applyLightboxSize(img);
     img.classList.add(direction === 'next' ? 'slide-next' : 'slide-prev');
+    preloadAdjacent(lightboxIndex);
   }
   const preload = new Image();
   preload.onload = show;
@@ -392,6 +402,7 @@ document.addEventListener('keydown', e => {
         applyLightboxSize(img);
         setTimeout(() => { img.style.transition = ''; }, 20);
         if (ref) ref.remove();
+        preloadAdjacent(lightboxIndex);
       }
       const preload = new Image();
       preload.onload = show;
