@@ -266,7 +266,7 @@ body {
     border-radius: 4px;
 }
 
-.bio-text h1 {
+.bio-text h2 {
     font-size: 13px;
     font-weight: 400;
     letter-spacing: 0.12em;
@@ -489,4 +489,16 @@ body {
     .lb-prev, .lb-next  { color: #fff; opacity: 0.08; background: none; }
     .lb-prev:active, .lb-next:active { opacity: 0.9; }
     #lbImg { width: auto; max-width: 96vw; max-height: 96dvh; }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
