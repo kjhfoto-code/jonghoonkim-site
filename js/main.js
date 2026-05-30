@@ -407,7 +407,8 @@ document.addEventListener('keydown', e => {
 
   lb.addEventListener('touchend', () => {
     if (!isDragging) { removeAdj(); return; }
-    if (Math.abs(currentDx) >= window.innerWidth * COMMIT_RATIO) {
+    const ratio = window.innerWidth > window.innerHeight ? COMMIT_RATIO / 2 : COMMIT_RATIO;
+    if (Math.abs(currentDx) >= window.innerWidth * ratio) {
       commitSwipe();
     } else {
       snapBack();
