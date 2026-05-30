@@ -283,7 +283,7 @@ document.addEventListener('keydown', e => {
   let adjEl       = null;
   let swipeDir    = null; // 'next' | 'prev'
 
-  const COMMIT_RATIO = 0.30;
+  const COMMIT_RATIO = 0.15;
   const ANIM_MS      = 240;
 
   function adjIndex(dir) {

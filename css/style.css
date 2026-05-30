@@ -298,11 +298,8 @@ body {
 
 .lightbox {
     position: fixed;
-    left: 0;
-    top: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.97);
+    inset: 0;
+    background: #000;
     z-index: 1000;
     display: grid;
     place-items: center;
@@ -437,7 +434,7 @@ body {
         padding: 64px 18px 60px;
     }
 
-    .lb-close { top: 12px; }
+    .lb-close { top: 60px; }
 }
 
 @media (max-width: 500px) {
