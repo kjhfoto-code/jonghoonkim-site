@@ -329,7 +329,6 @@ function getContainRect(img) {
 
 
 document.getElementById('lightbox').addEventListener('click', e => {
-  console.log('lightbox clicked', e.target, e.clientX, e.clientY);
   const lbImg = document.getElementById('lbImg');
   if (e.target !== document.getElementById('lightbox') && e.target !== lbImg) return;
   const r = getContainRect(lbImg);
