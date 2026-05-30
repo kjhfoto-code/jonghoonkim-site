@@ -156,7 +156,7 @@ function renderGallery(project) {
     item.className = 'gallery-item';
     const el = document.createElement('img');
     el.src = `gimgs/${img}`;
-    el.alt = '';
+    el.alt = `${project.title} — ${i + 1}`;
     el.loading = 'lazy';
     item.appendChild(el);
     item.addEventListener('click', () => openLightbox(i));
