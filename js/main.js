@@ -418,6 +418,78 @@ document.addEventListener('keydown', e => {
   lb.addEventListener('touchcancel', () => {
     if (isDragging) snapBack(); else removeAdj();
   }, { passive: true });
+
+  // Mouse drag (desktop)
+  const MOUSE_COMMIT_RATIO = 0.15;
+  let mouseDragged = false;
+
+  lb.addEventListener('mousedown', e => {
+    if (lb.classList.contains('hidden')) return;
+    if (e.target.closest('button')) return;
+    e.preventDefault();
+    startX       = e.clientX;
+    startY       = e.clientY;
+    currentDx    = 0;
+    isDragging   = false;
+    isHoriz      = null;
+    swipeDir     = null;
+    mouseDragged = false;
+    removeAdj();
+    img.style.transition = 'none';
+    img.classList.remove('slide-next', 'slide-prev');
+
+    function onMouseMove(e) {
+      e.preventDefault();
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+
+      if (isHoriz === null) {
+        if (Math.abs(dx) <= 5 && Math.abs(dy) <= 5) return;
+        isHoriz = Math.abs(dx) > Math.abs(dy);
+        if (!isHoriz) return;
+      } else if (!isHoriz) return;
+
+      isDragging   = true;
+      mouseDragged = true;
+      currentDx    = dx;
+
+      const newDir = dx < 0 ? 'next' : 'prev';
+      if (swipeDir !== newDir) {
+        removeAdj();
+        swipeDir = newDir;
+        adjEl    = createAdjEl(swipeDir);
+      }
+
+      img.style.transform = `translateX(${dx}px)`;
+      const base = swipeDir === 'next' ? window.innerWidth : -window.innerWidth;
+      adjEl.style.transform = `translateX(${base + dx}px)`;
+    }
+
+    function onMouseUp() {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+      if (!isDragging) { removeAdj(); return; }
+      if (Math.abs(currentDx) >= window.innerWidth * MOUSE_COMMIT_RATIO) {
+        commitSwipe();
+      } else {
+        snapBack();
+      }
+    }
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
+
+  // Capture-phase click handler: eat the synthetic click that fires after a drag ends
+  lb.addEventListener('click', e => {
+    if (mouseDragged) {
+      e.stopImmediatePropagation();
+      mouseDragged = false;
+    }
+  }, true);
+
+  // Prevent browser's native image drag
+  img.addEventListener('dragstart', e => e.preventDefault());
 }());
 
 document.querySelectorAll('.nav-link').forEach(a => {
