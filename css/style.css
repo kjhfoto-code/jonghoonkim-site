@@ -444,20 +444,20 @@ body {
     }
 
     .lb-close { top: 60px; }
-    #lbImg    { max-width: 92vw; max-height: 75vh; }
-    .lb-prev  { left: 8px; }
-    .lb-next  { right: 8px; }
+    #lbImg    { max-width: 100vw; max-height: 85vh; }
+    .lb-prev  { left: 4px; }
+    .lb-next  { right: 4px; }
 }
 
 @media (max-width: 500px) {
     .home-grid    { grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); }
     .gallery-grid { grid-template-columns: repeat(3, 1fr); }
-    #lbImg { max-width: 92vw; max-height: 75vh; }
+    #lbImg { max-width: 100vw; max-height: 85vh; }
 }
 
 @media (orientation: landscape) {
     .lb-close { top: 8px; font-size: clamp(10px, 1.2vw, 20px) !important; }
-    #lbImg    { max-width: 92vw; max-height: 75vh; }
-    .lb-prev  { left: 8px; }
-    .lb-next  { right: 8px; }
+    #lbImg    { max-width: 100vw; max-height: 85vh; }
+    .lb-prev  { left: 4px; }
+    .lb-next  { right: 4px; }
 }
