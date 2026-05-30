@@ -223,6 +223,7 @@ function openLightbox(index) {
     img.style.opacity = '1';
   };
   img.src = `gimgs/${lightboxImages[lightboxIndex]}`;
+  if (img.complete && img.naturalWidth > 0) { img.onload(); img.onload = null; }
   document.getElementById('lightbox').classList.remove('hidden');
   document.body.style.overflow = 'hidden';
 }
@@ -237,11 +238,14 @@ function slideTo(direction) {
   img.classList.remove('slide-next', 'slide-prev');
   void img.offsetWidth;
   img.style.cssText = '';
+  img.style.opacity = '0';
   img.onload = () => {
     applyLightboxSize(img);
+    img.style.opacity = '1';
     img.classList.add(direction === 'next' ? 'slide-next' : 'slide-prev');
   };
   img.src = `gimgs/${lightboxImages[lightboxIndex]}`;
+  if (img.complete && img.naturalWidth > 0) { img.onload(); img.onload = null; }
 }
 
 function lbPrev() {
@@ -403,7 +407,8 @@ document.addEventListener('keydown', e => {
         img.style.transition = '';
         img.style.opacity    = '1';
       };
-      img.src    = `gimgs/${lightboxImages[lightboxIndex]}`;
+      img.src = `gimgs/${lightboxImages[lightboxIndex]}`;
+      if (img.complete && img.naturalWidth > 0) { img.onload(); img.onload = null; }
       if (ref) ref.remove();
     }, ANIM_MS + 10);
   }
