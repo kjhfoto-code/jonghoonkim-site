@@ -420,7 +420,7 @@ document.addEventListener('keydown', e => {
   }, { passive: true });
 
   // Mouse drag (desktop)
-  const MOUSE_COMMIT_RATIO = 0.15;
+  const MOUSE_COMMIT_RATIO = 0.10;
   let mouseDragged = false;
 
   lb.addEventListener('mousedown', e => {
