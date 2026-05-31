@@ -170,7 +170,7 @@ body {
     grid-template-columns: repeat(4, 1fr);
     gap: 35px;
     max-width: 1600px;
-    margin-left: auto;
+    margin-left: 0;
     margin-right: auto;
 }
 
@@ -239,7 +239,7 @@ body {
     grid-template-columns: repeat(5, 1fr);
     gap: var(--gap);
     max-width: 1600px;
-    margin-left: auto;
+    margin-left: 0;
     margin-right: auto;
 }
 
