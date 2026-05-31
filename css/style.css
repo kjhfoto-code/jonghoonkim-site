@@ -167,8 +167,11 @@ body {
 
 .home-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(256px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 35px;
+    max-width: 1600px;
+    margin-left: 0;
+    margin-right: auto;
 }
 
 .home-card {
@@ -235,6 +238,9 @@ body {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: var(--gap);
+    max-width: 1600px;
+    margin-left: 0;
+    margin-right: auto;
 }
 
 .gallery-item {
@@ -442,13 +448,13 @@ body {
 /* ── Responsive ──────────────────────────────── */
 
 @media (max-width: 1200px) {
-    .home-grid    { grid-template-columns: repeat(auto-fill, minmax(208px, 1fr)); }
+    .home-grid    { grid-template-columns: repeat(3, 1fr); }
     .gallery-grid { grid-template-columns: repeat(4, 1fr); }
     #main-content { padding: 40px 30px; }
 }
 
 @media (max-width: 860px) {
-    .home-grid    { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    .home-grid    { grid-template-columns: repeat(2, 1fr); }
     .gallery-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
@@ -490,8 +496,8 @@ body {
 }
 
 @media (max-width: 500px) {
-    .home-grid    { grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); }
-    .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+    .home-grid    { grid-template-columns: repeat(1, 1fr); }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (orientation: landscape) {
