@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "PowerShell(Head-Object *)",
-      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\ngfot\\\\Desktop\\\\jonghoonkim-site\" -Recurse | Where-Object { -not $_.PSIsContainer } | Select-Object FullName)"
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\ngfot\\\\Desktop\\\\jonghoonkim-site\" -Recurse | Where-Object { -not $_.PSIsContainer } | Select-Object FullName)",
+      "Bash(git checkout *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(gh pr *)"
     ]
   }
 }
